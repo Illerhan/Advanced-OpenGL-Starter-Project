@@ -7,6 +7,7 @@
 using namespace std;
 
 
+
 const float PADDLE_WIDTH = 0.05f;   // Width of the paddles
 const float PADDLE_HEIGHT = 0.2f;  // Height of the paddles
 const float BALL_SIZE = 0.05f;      // Diameter of the ball
@@ -34,6 +35,27 @@ float ballY = 0.0f;
 float ballVelocityX = BALL_SPEED;
 float ballVelocityY = -BALL_SPEED;
 
+bool checkPaddleCollision(float leftPaddleY, float rightPaddleY, float paddleHeight) {
+    float paddleTop = paddleHeight;
+    float paddleBottom = -paddleHeight;
+
+    // Check collision with left paddle
+    if (ballX - BALL_SIZE / 2 < -0.85f && ballX + BALL_SIZE / 2 > -0.95f - PADDLE_WIDTH &&
+        ballY + BALL_SIZE / 2 > leftPaddleY + paddleBottom && ballY - BALL_SIZE / 2 < leftPaddleY + paddleTop) {
+        ballVelocityX = -ballVelocityX;
+        return true;
+    }
+
+    // Check collision with right paddle
+    if (ballX + BALL_SIZE / 2 > 0.85f + PADDLE_WIDTH && ballX - BALL_SIZE / 2 < 0.95f &&
+        ballY + BALL_SIZE / 2 > rightPaddleY + paddleBottom && ballY - BALL_SIZE / 2 < rightPaddleY + paddleTop) {
+        ballVelocityX = -ballVelocityX;
+        return true;
+    }
+
+    return false;
+}
+
 void updateLeftPaddleVertices() {
     verticesPaddleLeft[1] = leftPaddleY + PADDLE_HEIGHT;
     verticesPaddleLeft[4] = leftPaddleY + PADDLE_HEIGHT;
@@ -49,30 +71,36 @@ void updateRightPaddleVertices() {
     verticesPaddleRight[10] = rightPaddleY - PADDLE_HEIGHT;
 }
 
+
+
+
 void updateBallPosition() {
 
     ballX += ballVelocityX;
     ballY += ballVelocityY;
 
     // Bounce off the walls
-    if (ballX + BALL_SIZE / 2 > 1.0f || ballX - BALL_SIZE / 2 < -1.0f) {
+    if (ballX + BALL_SIZE / 2 > 1.0f) {
+        ballX = 1.0f - BALL_SIZE / 2;
+        ballVelocityX = -ballVelocityX;
+    }
+    else if (ballX - BALL_SIZE / 2 < -1.0f) {
+        ballX = -1.0f + BALL_SIZE / 2;
         ballVelocityX = -ballVelocityX;
     }
 
-    if (ballY + BALL_SIZE / 2 > 1.0f) {
-        ballY = 1.0f - BALL_SIZE / 2;
+    if (ballY + BALL_SIZE / 2 > 1.0f || ballY - BALL_SIZE / 2 < -1.0f) {
         ballVelocityY = -ballVelocityY;
     }
-    else if (ballY - BALL_SIZE / 2 < -1.0f) {
-        ballY = -1.0f + BALL_SIZE / 2;
-        ballVelocityY = -ballVelocityY;
+
+    // Check paddle collisions
+    if (checkPaddleCollision(leftPaddleY, rightPaddleY, PADDLE_HEIGHT)) {
+        // Adjust the ball position to prevent sticking to the paddle
+        ballX += ballVelocityX;
     }
 }
 
-bool checkPaddleCollision(float paddleY, float paddleHeight) {
-    return (ballX + BALL_SIZE / 2 > 0.85f && ballX - BALL_SIZE / 2 < 0.95f + PADDLE_WIDTH &&
-        ballY + BALL_SIZE / 2 > paddleY - paddleHeight && ballY - BALL_SIZE / 2 < paddleY + paddleHeight);
-}
+
 
 string LoadShader(string fileName);
 
