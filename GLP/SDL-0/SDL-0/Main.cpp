@@ -3,12 +3,14 @@
 #include <glew.h>
 #include <fstream>
 #include <string>
+#include <cstdlib>
 using namespace std;
 
 
 const float PADDLE_WIDTH = 0.05f;   // Width of the paddles
 const float PADDLE_HEIGHT = 0.2f;  // Height of the paddles
 const float BALL_SIZE = 0.05f;      // Diameter of the ball
+const float BALL_SPEED = 0.005f;
 
 float leftPaddleY = 0.0f;
 float rightPaddleY = 0.0f;
@@ -27,6 +29,11 @@ float verticesPaddleRight[] = {
     0.85f + PADDLE_WIDTH, -PADDLE_HEIGHT, 0.0f
 };
 
+float ballX = 0.0f;
+float ballY = 0.0f;
+float ballVelocityX = BALL_SPEED;
+float ballVelocityY = -BALL_SPEED;
+
 void updateLeftPaddleVertices() {
     verticesPaddleLeft[1] = leftPaddleY + PADDLE_HEIGHT;
     verticesPaddleLeft[4] = leftPaddleY + PADDLE_HEIGHT;
@@ -40,6 +47,31 @@ void updateRightPaddleVertices() {
     verticesPaddleRight[4] = rightPaddleY + PADDLE_HEIGHT;
     verticesPaddleRight[7] = rightPaddleY - PADDLE_HEIGHT;
     verticesPaddleRight[10] = rightPaddleY - PADDLE_HEIGHT;
+}
+
+void updateBallPosition() {
+
+    ballX += ballVelocityX;
+    ballY += ballVelocityY;
+
+    // Bounce off the walls
+    if (ballX + BALL_SIZE / 2 > 1.0f || ballX - BALL_SIZE / 2 < -1.0f) {
+        ballVelocityX = -ballVelocityX;
+    }
+
+    if (ballY + BALL_SIZE / 2 > 1.0f) {
+        ballY = 1.0f - BALL_SIZE / 2;
+        ballVelocityY = -ballVelocityY;
+    }
+    else if (ballY - BALL_SIZE / 2 < -1.0f) {
+        ballY = -1.0f + BALL_SIZE / 2;
+        ballVelocityY = -ballVelocityY;
+    }
+}
+
+bool checkPaddleCollision(float paddleY, float paddleHeight) {
+    return (ballX + BALL_SIZE / 2 > 0.85f && ballX - BALL_SIZE / 2 < 0.95f + PADDLE_WIDTH &&
+        ballY + BALL_SIZE / 2 > paddleY - paddleHeight && ballY - BALL_SIZE / 2 < paddleY + paddleHeight);
 }
 
 string LoadShader(string fileName);
@@ -170,6 +202,7 @@ int main(int argc, char* argv[]) {
 
         updateLeftPaddleVertices();
         updateRightPaddleVertices();
+        updateBallPosition();
 
         // Clear the screen
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -191,10 +224,16 @@ int main(int argc, char* argv[]) {
         glBindVertexArray(vaoPaddle);
         glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
 
-
-
-        // Draw the ball
         glBindVertexArray(vaoBall);
+        glBindBuffer(GL_ARRAY_BUFFER, vboBall);
+        float verticesBall[] = {
+            // Ball
+            ballX - BALL_SIZE / 2, ballY - BALL_SIZE / 2, 0.0f,
+            ballX + BALL_SIZE / 2, ballY - BALL_SIZE / 2, 0.0f,
+            ballX + BALL_SIZE / 2, ballY + BALL_SIZE / 2, 0.0f,
+            ballX - BALL_SIZE / 2, ballY + BALL_SIZE / 2, 0.0f
+        };
+        glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(verticesBall), verticesBall);
         glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
 
         SDL_GL_SwapWindow(Window);
