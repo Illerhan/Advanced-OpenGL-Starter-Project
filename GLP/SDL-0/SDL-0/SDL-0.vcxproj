@@ -94,6 +94,7 @@
     <ClCompile Include="maths\Vector2.cpp" />
     <ClCompile Include="maths\Vector3.cpp" />
     <ClCompile Include="maths\Vector4.cpp" />
+    <ClCompile Include="MipMapScene.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="ShaderProgram.cpp" />
@@ -142,6 +143,7 @@
     <ClInclude Include="maths\Vector2.h" />
     <ClInclude Include="maths\Vector3.h" />
     <ClInclude Include="maths\Vector4.h" />
+    <ClInclude Include="MipMapScene.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneManagement.h" />
     <ClInclude Include="Shader.h" />
