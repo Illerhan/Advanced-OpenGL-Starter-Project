@@ -1,5 +1,5 @@
 
-#include "TextureScene.h"
+#include "GrassScene.h"
 #include <iostream>
 #include "Shapes2D.h"
 
@@ -8,21 +8,21 @@
 /// 
 
 
-void TextureScene::LoadShaders()
+void GrassScene::LoadShaders()
 {
-    m_vertexShader.LoadFrom("Blades.vertex", VERTEX);
+    m_vertexShader.LoadFrom("Blades.vert", VERTEX);
     m_animVertexShader.LoadFrom("textureAnimVertex.shader", VERTEX);
     m_fragmentShader.LoadFrom("textureFragment.shader", FRAGMENT);
 }
 
-void TextureScene::CreateShaderPrograms()
+void GrassScene::CreateShaderPrograms()
 {
 	m_animShaderProgram.Compose(std::vector<Shader*>{&m_animVertexShader, &m_fragmentShader});
 	m_shaderProgram.Compose(std::vector<Shader*>{&m_vertexShader, &m_fragmentShader});
     m_shaderProgram.Use();
 }
 
-void TextureScene::VerticeInformationSlicer()
+void GrassScene::VerticeInformationSlicer()
 {
     float* verticeArray = new float[m_vertices.size()]();
     std::copy(m_vertices.begin(), m_vertices.end(), verticeArray);
@@ -38,7 +38,7 @@ void TextureScene::VerticeInformationSlicer()
     delete [] verticeArray;
 }
 
-void TextureScene::SetupScene()
+void GrassScene::SetupScene()
 {
     //You can modify the tiling in x and y of the texture from there !
     Vector2 tiling = Vector2(1.0,1.0);
@@ -47,36 +47,11 @@ void TextureScene::SetupScene()
     
     m_vertices = {
         //POSITION      TEXTURE COORDINATES
-        0.0, 1.0,           tiling.x, tiling.y,       //A
-        0.0, 0.0,           tiling.x, 0.0,           //B
-        -1.0, 1.0,          0.0, tiling.y,           //C
-        -1.0, 0.0,          0.0, 0.0,               //D
-        
-        0.5, 1.0,           tiling.x, tiling.y,       //A
-        0.5, 0.5,           tiling.x, 0.0,           //B
-        0.0, 1.0,           0.0, tiling.y,           //C
-        0.0, 0.5,           0.0, 0.0,               //D
-
-        0.25, 0.5,          tiling.x, tiling.y,       //A
-        0.25, 0.25,         tiling.x, 0.0,           //B
-        0.0, 0.5,           0.0, tiling.y,           //C
-        0.0, 0.25,          0.0, 0.0,               //D
-        
-        0.125, 0.25,        tiling.x, tiling.y,       //A
-        0.125, 0.125,       tiling.x, 0.0,           //B
-        0.0, 0.25,          0.0, tiling.y,           //C
-        0.0, 0.125,         0.0, 0.0,               //D
-
-        0.06, 0.125,      tiling.x, tiling.y,       //A
-        0.06, 0.06,     tiling.x, 0.0,           //B
-        0.0, 0.125,         0.0, tiling.y,           //C
-        0.0, 0.06,        0.0, 0.0,               //D
-
-        0.5, 0.0,           tiling.x, tiling.y,       //A
-        0.5, -1.0,           tiling.x, 0.0,           //B
-        -0.5, 0.0,          0.0, tiling.y,           //C
-        -0.5, -1.0,          0.0, 0.0,               //D
-
+        0.0, 0.25,           tiling.x, tiling.y,       //A
+        0.0, 0.5,           tiling.x, 0.0,           //B
+       0.25, 0.5,          0.0, tiling.y,           //C
+        0.0, 0.5,          0.0, 0.0,               //D
+        0.0, 0.75,          tiling.x, 0.0,               //E
     };
     LoadShaders();
     CreateShaderPrograms();
@@ -107,50 +82,48 @@ void TextureScene::SetupScene()
     glGenerateTextureMipmap(m_GrassTexture.id);
 }
 
-void ActivateMipMap(bool mipmap = true)
-{
-    if(mipmap)
-    {
-        
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_LINEAR_MIPMAP_LINEAR );
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_LINEAR_MIPMAP_LINEAR );
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+// void ActivateMipMap(bool mipmap = true)
+// {
+//     if(mipmap)
+//     {
+//         
+//         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_LINEAR_MIPMAP_LINEAR );
+//         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_LINEAR_MIPMAP_LINEAR );
+//         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+//
+//     }
+//     else
+//     {
+//         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_LINEAR );
+//         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_LINEAR );
+//         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+//     }
+// }
 
-    }
-    else
-    {
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_LINEAR );
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_LINEAR );
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    }
-}
-
-void TextureScene::UpdateScene()
+void GrassScene::UpdateScene()
 {
     m_shaderProgram.Use();
-    m_WallTexture.use();
+    m_GrassTexture.use();
+    //m_WallTexture.use();
     
     glBindVertexArray(m_vao);
-    ActivateMipMap(mipmap);
-    glDrawArrays(GL_TRIANGLE_STRIP, 0,4);
-    glDrawArrays(GL_TRIANGLE_STRIP, 4,4);
-    glDrawArrays(GL_TRIANGLE_STRIP, 8,4);
-    glDrawArrays(GL_TRIANGLE_STRIP, 12,4);
-    glDrawArrays(GL_TRIANGLE_STRIP, 16,4);
+    //ActivateMipMap(mipmap);
+    glDrawArrays(GL_TRIANGLE_STRIP, 0,5);
+
 
     m_animShaderProgram.Use();
     m_GrassTexture.use();
     float timeValue = (float)SDL_GetTicks() / 1000;
-    float sinusoidValue = (sin(timeValue)/2.0 ) +0.5f;
+    float sinusoidValue = (sin(timeValue)/2.0 ) + 0.5f;
 
-    m_animShaderProgram.setFloat("scale", sinusoidValue);
-    ActivateMipMap(mipmap);
+    m_animShaderProgram.setFloat("scale", 1);
+    //ActivateMipMap(mipmap);
 
     glDrawArrays(GL_TRIANGLE_STRIP, 20,4);
 
 }
 
-void TextureScene::HandleInputs(SDL_Event& e)
+void GrassScene::HandleInputs(SDL_Event& e)
 {
     switch (e.type)
     {
