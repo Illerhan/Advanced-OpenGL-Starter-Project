@@ -1,7 +1,7 @@
 #pragma once
 #include "BaseScene.h"
-#include "GrassScene.h"
 #include "ScreensaverScene.h"
+#include "CubeScene.h"
 #include "TessellationModesScene.h"
 #include "TerrainTessellationScene.h"
 #include "TextureScene.h"
@@ -13,41 +13,41 @@ enum SceneID {
 	TESSELLATION_MODES,
 	TERRAIN_TESSELLATION,
 	MIP_MAP,
-	GRASS_TEXTURE
+	CUBES
 };
 
 Scene* SceneSelector(SceneID id) {
 	switch (id) {
 	case BASE_SCENE: {
-		return new BaseScene();
-		break;
+			return new BaseScene();
+			break;
 	}	
 	case DEMO_SCENE: {
-		return new ScreensaverScene();
-		break;
+			return new ScreensaverScene();
+			break;
 	}
 	case TESSELLATION: {
-		return new TessellationScene();
-		break;
+			return new TessellationScene();
+			break;
 	}
 	case TESSELLATION_MODES: {
-		return new TessellationModesScene();
-		break;
+			return new TessellationModesScene();
+			break;
 	}
 	case TERRAIN_TESSELLATION: {
-		return new TerrainTessellationScene();
-		break;
+			return new TerrainTessellationScene();
+			break;
 	}
 	case MIP_MAP: {
 			return new TextureScene();
-		break;
+			break;
 	}
-	case GRASS_TEXTURE: {
-		return new GrassScene();
-		break;
+	case CUBES: {
+			return new CubeScene();
+			break;
 	}
 	default: {
-		return nullptr;
+			return nullptr;
 	}
 	}
 }

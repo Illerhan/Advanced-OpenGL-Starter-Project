@@ -1,6 +1,6 @@
 #version 450 core
 
-layout(quads) in;
+layout(quads,fractional_even_spacing, cw) in;
 
 void main(void)
 {

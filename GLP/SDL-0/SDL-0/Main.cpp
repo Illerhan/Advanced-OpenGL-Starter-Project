@@ -14,10 +14,10 @@ using namespace std;
 int main(int argc, char* argv[])
 {
 	//Creating a new window w/ dimensions and background color (optional) 
-	Window window(540.0f, 540.0f, Color(0.0f, 0.0f, 0.2f, 1.0f));
+	Window window(1000.f, 850.0f, Color(0.0f, 0.0f, 0.2f, 1.0f));
 
 	//Use a SceneID (see SceneManagement.h) to quickly setup the correct scene for the build!
-	Scene* scene = SceneSelector(GRASS_TEXTURE);
+	Scene* scene = SceneSelector(CUBES);
 	if (scene == nullptr) return 1; //Scene doesn't exist yet
 
 	//Preparing shaders, shader programs, vao and vbo
@@ -41,7 +41,8 @@ int main(int argc, char* argv[])
 			scene->HandleInputs(event);
 		}
 		// Clear the screen
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); 
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		glClearColor(.7,.7,.7,1);
 		//Drawing the shapes and filling the buffer
 		scene->UpdateScene();
 		//Swap the buffers --> Display the newly computed one, hide the one displayed last frame
