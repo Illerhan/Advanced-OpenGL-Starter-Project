@@ -9,5 +9,5 @@ out vec3 OurColor;
 void main()
 {
     gl_Position =  projection * mv_matrix * vec4(pos, 1.0);
-    OurColor = vec3((pos*2.0f)+1.0f);
+    OurColor = vec3(1.0);
 }

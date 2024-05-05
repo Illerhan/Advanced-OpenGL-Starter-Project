@@ -2,7 +2,7 @@
 
 using namespace std;
 
-const bool ENABLE_GEOMETRY_SHADER = false;
+const bool ENABLE_GEOMETRY_SHADER = true;
 
 TessellationScene::TessellationScene() {
 

@@ -8,7 +8,7 @@ class SphereScene : public Scene
 {
 private:
     Texture2D m_WallTexture;
-    Shader m_tessVertexShader, m_tessFragShader, m_vertexShader, m_fragmentShader, m_tessControlShader, m_tessEvalShader;
+    Shader m_tessVertexShader, m_tessFragShader, m_vertexShader, m_fragmentShader, m_tessControlShader, m_tessEvalShader,m_geometryShader;
     ShaderProgram m_Program, m_tessProgram;
     Matrix4 m_projection, m_mv, m_rotation;
     Vector3 m_position;
