@@ -9,7 +9,7 @@ void SphereScene::LoadShaders() {
 }
 
 void SphereScene::CreateShaderPrograms() {
-    m_Program.Compose(vector<Shader*>{&m_vertexShader, /*&m_geometryShader,*/ &m_fragmentShader });
+    m_Program.Compose(vector<Shader*>{&m_vertexShader,/* &m_geometryShader,*/ &m_fragmentShader });
 }
 
 void SphereScene::VerticeInformationSlicer() {
