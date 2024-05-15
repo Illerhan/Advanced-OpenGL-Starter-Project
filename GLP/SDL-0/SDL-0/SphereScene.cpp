@@ -4,12 +4,12 @@
 
 void SphereScene::LoadShaders() {
     m_vertexShader.LoadFrom("sphere.vert", VERTEX);
-    m_geometryShader.LoadFrom("Trees.geom", GEOMETRY);
+    //m_geometryShader.LoadFrom("Trees.geom", GEOMETRY);
     m_fragmentShader.LoadFrom("sphere.frag", FRAGMENT);
 }
 
 void SphereScene::CreateShaderPrograms() {
-    m_Program.Compose(vector<Shader*>{&m_vertexShader, &m_fragmentShader, &m_geometryShader});
+    m_Program.Compose(vector<Shader*>{&m_vertexShader, /*&m_geometryShader,*/ &m_fragmentShader });
 }
 
 void SphereScene::VerticeInformationSlicer() {
@@ -24,12 +24,12 @@ SphereScene::SphereScene() : Scene() {
     glGenBuffers(1, &m_vboI);
     glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_vboI);
-    Shape3D::CreateSphere(m_vertices, m_indicies, m_lineIndices, Vector3(0.0, 0.0, 0.0), 1.0f, 10, 10);
+    Shape3D::CreateSphere(m_vertices, m_indicies, m_lineIndices, Vector3(0.0, 0.0, 0.0), 1.f, 10, 10);
 }
 
 void SphereScene::SetupScene() {
     LoadShaders();
-    CreateShaderPrograms();
+    CreateShaderPrograms(); 
     glGenVertexArrays(1, &m_vao);
     glBindVertexArray(m_vao);
     VerticeInformationSlicer();
@@ -42,7 +42,7 @@ void SphereScene::SetupScene() {
 }
 
 void SphereScene::UpdateScene() {
-    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     float timeValue = (float)SDL_GetTicks() / 1000;
     float delta = LastTick - timeValue;
     LastTick = timeValue;
