@@ -8,10 +8,10 @@ out vec4 FragColor;
 
 void main()
 {
-    float contrast = 3;
+    float contrast = 4;
     float maxDistance = length(vec3(1.0, 1.0, 1.0));
     float normalizedDistance = DistanceToCenter / maxDistance;
     normalizedDistance = pow(normalizedDistance, contrast);
-    vec3 color = mix(vec3(0.0,0.0,0.0), vec3(1.0,1.0,1.0),normalizedDistance);
+    vec3 color = mix(vec3(0.0,0.5,1.0), vec3(0.5,1.0,0.0),normalizedDistance);
     FragColor = vec4(color, 1.0);
 }
