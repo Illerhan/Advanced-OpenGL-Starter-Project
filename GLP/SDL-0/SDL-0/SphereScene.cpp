@@ -6,6 +6,7 @@ void SphereScene::LoadShaders() {
     m_vertexShader.LoadFrom("sphere.vert", VERTEX);
     //m_geometryShader.LoadFrom("Trees.geom", GEOMETRY);
     m_fragmentShader.LoadFrom("sphere.frag", FRAGMENT);
+    
 }
 
 void SphereScene::CreateShaderPrograms() {
