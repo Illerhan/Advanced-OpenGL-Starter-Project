@@ -6,11 +6,12 @@ void SphereScene::LoadShaders() {
     m_vertexShader.LoadFrom("sphere.vert", VERTEX);
     m_geometryShader.LoadFrom("Trees.geom", GEOMETRY);
     m_fragmentShader.LoadFrom("sphere.frag", FRAGMENT);
+    m_fragmentShader2.LoadFrom("simpleFragment.shader", FRAGMENT);
     
 }
 
 void SphereScene::CreateShaderPrograms() {
-    m_Program.Compose(vector<Shader*>{&m_vertexShader,&m_geometryShader, &m_fragmentShader });
+    m_Program.Compose(vector<Shader*>{&m_vertexShader,&m_geometryShader, &m_fragmentShader2 });
     m_tessProgram.Compose(vector<Shader*>{&m_vertexShader, &m_fragmentShader });
 
 }
