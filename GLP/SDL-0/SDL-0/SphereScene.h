@@ -14,6 +14,10 @@ private:
     Vector3 m_position;
     unsigned int m_vboV, m_vboI;
 
+    unsigned int m_vboV2, m_vboI2;
+    ShaderProgram m_Program2;
+    
+    std::vector<unsigned int> m_indicies2, m_lineIndices2;
     std::vector<unsigned int> m_indicies, m_lineIndices;
 protected:
     void LoadShaders() override;

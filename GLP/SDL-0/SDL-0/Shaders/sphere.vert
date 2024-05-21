@@ -4,8 +4,8 @@ in vec3 pos;
 uniform mat4 mv_matrix;
 uniform mat4 projection;
 
-out vec3 FragPos;  // Pass position to fragment shader
-out float DistanceToCenter;  // Pass distance to fragment shader
+out vec3 FragPos;
+out float DistanceToCenter;
 
 float hash(vec3 p) {
     return fract(sin(dot(p, vec3(10, 78.233, 75))) * 43758.5453);
@@ -13,11 +13,11 @@ float hash(vec3 p) {
 
 void main()
 {
-    vec3 noiseOffset = vec3(4.0,2.0, 100.f);  // Adjust this vector to change the noise pattern
+    vec3 noiseOffset = vec3(4.0,2.0, 100.f); 
     float noiseValue = hash(pos + noiseOffset);
-    vec3 displacedPos = pos + noiseValue * normalize(pos);  // Displace along the normal direction
+    vec3 displacedPos = pos + noiseValue * normalize(pos); 
 
     gl_Position = projection * mv_matrix * vec4(displacedPos, 1.0);
-    FragPos = displacedPos;  // Pass displaced position to fragment shader
-    DistanceToCenter = length(displacedPos);  // Calculate and pass distance to center of sphere
+    FragPos = displacedPos;
+    DistanceToCenter = length(displacedPos); 
 }

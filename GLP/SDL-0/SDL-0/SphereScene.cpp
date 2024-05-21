@@ -4,13 +4,15 @@
 
 void SphereScene::LoadShaders() {
     m_vertexShader.LoadFrom("sphere.vert", VERTEX);
-    //m_geometryShader.LoadFrom("Trees.geom", GEOMETRY);
+    m_geometryShader.LoadFrom("Trees.geom", GEOMETRY);
     m_fragmentShader.LoadFrom("sphere.frag", FRAGMENT);
     
 }
 
 void SphereScene::CreateShaderPrograms() {
-    m_Program.Compose(vector<Shader*>{&m_vertexShader,/* &m_geometryShader,*/ &m_fragmentShader });
+    m_Program.Compose(vector<Shader*>{&m_vertexShader,&m_geometryShader, &m_fragmentShader });
+    m_tessProgram.Compose(vector<Shader*>{&m_vertexShader, &m_fragmentShader });
+
 }
 
 void SphereScene::VerticeInformationSlicer() {
@@ -35,7 +37,7 @@ void SphereScene::SetupScene() {
     glBindVertexArray(m_vao);
     VerticeInformationSlicer();
     glEnable(GL_DEPTH_TEST);
-    glDepthFunc(GL_LEQUAL);
+    glDepthFunc(GL_LESS);
     m_projection = Matrix4::createPerspectiveFOV(70.0f, Window::Dimension.x, Window::Dimension.y, 0.1f, 1000.0f);
     m_position = Vector3(0, 0, -4.0f);
     m_mv = Matrix4::createTranslation(m_position);
@@ -43,7 +45,8 @@ void SphereScene::SetupScene() {
 }
 
 void SphereScene::UpdateScene() {
-    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    glLineWidth(10);
     float timeValue = (float)SDL_GetTicks() / 1000;
     float delta = LastTick - timeValue;
     LastTick = timeValue;
@@ -60,5 +63,12 @@ void SphereScene::UpdateScene() {
     m_Program.Use();
     m_Program.setMatrix4("mv_matrix", m_mv);
     m_Program.setMatrix4("projection", m_projection);
+    glDrawElements(GL_TRIANGLES, m_indicies.size(), GL_UNSIGNED_INT, m_indicies.data());
+    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
+    m_tessProgram.Use();
+    m_tessProgram.setMatrix4("mv_matrix", m_mv);
+    m_tessProgram.setMatrix4("projection", m_projection);
+    // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     glDrawElements(GL_TRIANGLES, m_indicies.size(), GL_UNSIGNED_INT, m_indicies.data());
 }
